@@ -722,6 +722,9 @@ contains
          deallocate(psx,dpx)
       end if
 
+      !$ser savepoint DryMassControl-Out
+      !$ser data pe=pe
+
 #ifdef SW_DYNAMICS
 !!$OMP parallel do default(none) shared(is,ie,js,je,ps,delp,agrav)
       do j=js,je
@@ -743,9 +746,16 @@ contains
                         k_split, neststruct, parent_grid, flagstruct%lim_fac)
        else
          if ( flagstruct%z_tracer .and. q_split == 0 ) then
+         !$ser savepoint Tracer2D1L-In
+         !$ser data tracers=q dp1=dp1
+         !$ser data mfxd_R4=mfxL mfyd_R4=mfyL cxd_R4=cxL cyd_R4=cyL
+         !$ser data nq=nq q_split=q_split mdt=mdt nwat=nwat
          call tracer_2d_1L(q, dp1, mfxL, mfyL, cxL, cyL, gridstruct, bd, domain, npx, npy, npz, nq,    &
                         flagstruct%hord_tr, mdt, idiag%id_divg, i_pack(10), &
                         flagstruct%nord_tr, flagstruct%trdm2, flagstruct%lim_fac)
+         !$ser savepoint Tracer2D1L-Out
+         !$ser data tracers=q dp1=dp1
+         !$ser data mfxd_R4=mfxL mfyd_R4=mfyL cxd_R4=cxL cyd_R4=cyL
          else
          call tracer_2d(q, dp1, mfxL, mfyL, cxL, cyL, gridstruct, bd, domain, npx, npy, npz, nq,    &
                         flagstruct%hord_tr, q_split, mdt, idiag%id_divg, i_pack(10), &
@@ -796,6 +806,12 @@ contains
                                                   call avec_timer_start(6)
 #endif
 
+         !$ser savepoint Remapping_GEOS-In
+         !$ser data iq=iq last_step=last_step consv_te=consv_te ps=ps pe=pe delp=delp pkz=pkz pk=pk mdt=mdt bdt=bdt
+         !$ser data sphum=sphum q_con=q_con u=u v=v w=w delz=delz pt=pt tracers=q phis=phis zvir=zvir akap=akap
+         !$ser data cappa=cappa kord_tracer=kord_tracer peln=peln te_2d=te_2d ua=ua va=va omga=omga dp1=dp1 wsd=ws 
+         !$ser data reproduce_sum=reproduce_sum ptop=ptop ak=ak bk=bk pfull=pfull hybrid_z=hybrid_z
+         !$ser data do_adiabatic_init=do_adiabatic_init nq=nq
          call Lagrangian_to_Eulerian(last_step, consv_te, ps, pe, delp,          &
                      pkz, pk, mdt, bdt, npz, is,ie,js,je, isd,ied,jsd,jed,       &
                      nq, nwat, sphum, q_con, u,  v, w, delz, pt, q, phis,    &
@@ -808,6 +824,9 @@ contains
                      flagstruct%remap_option, flagstruct%gmao_remap, &
                      flagstruct%gmao_top_bc, flagstruct%gmao_bot_bc)
 !!!                  mfx=mfxL, mfy=mfyL, cx=cxL, cy=cyL)
+         !$ser savepoint Remapping_GEOS-Out
+         !$ser data te_2d=te_2d pk=pk tracers=q delp=delp pe=pe ps=ps u=u v=v w=w pt=pt delz=delz q_con=q_con cappa=cappa
+         !$ser data ua=ua va=va omga=omga peln=peln pkz=pkz dp1=dp1
 
 #ifdef AVEC_TIMERS
                                                   call avec_timer_stop(6)
@@ -881,6 +900,9 @@ contains
   deallocate ( dtdt_m )
 
   if( nwat>=6 ) then
+     !$ser savepoint Neg_Adj3-In
+     !$ser data peln=peln delz=delz pt=pt delp=delp  qvapor=q(:,:,:,sphum) qliquid=q(:,:,:,liq_wat) qice=q(:,:,:,ice_wat) qrain=q(:,:,:,rainwat) qsnow=q(:,:,:,snowwat) qgraupel=q(:,:,:,graupel) qcld=q(:,:,:,cld_amt) 
+     !$ser data cld_amt=cld_amt
      if (cld_amt > 0) then
       call neg_adj3(is, ie, js, je, ng, npz,        &
                     flagstruct%hydrostatic,         &
@@ -903,6 +925,8 @@ contains
                                 q(isd,jsd,1,snowwat), &
                                 q(isd,jsd,1,graupel), check_negative=flagstruct%check_negative)
      endif
+     !$ser savepoint Neg_Adj3-Out
+     !$ser data  qvapor=q(:,:,:,sphum) qliquid=q(:,:,:,liq_wat) qice=q(:,:,:,ice_wat) qrain=q(:,:,:,rainwat) qsnow=q(:,:,:,snowwat) qgraupel=q(:,:,:,graupel) qcld=q(:,:,:,cld_amt) pt=pt
      if ( flagstruct%fv_debug ) then
          if(is_master()) write(6,*) ''
          if(is_master()) write(6,*) '------------------------------------'
@@ -987,8 +1011,13 @@ contains
          if(is_master()) write(6,*) ''
       endif
 
+!$ser savepoint CubedToLatLon-In
+!$ser verbatim mode=1
+!$ser data u=u v=v ua=ua va=va mode=mode
 911  call cubed_to_latlon(u, v, ua, va, gridstruct, &
           npx, npy, npz, 1, gridstruct%grid_type, domain, gridstruct%nested, flagstruct%c2l_ord, bd)
+!$ser savepoint CubedToLatLon-Out
+!$ser data u=u v=v ua=ua va=va
 
   deallocate(dp1)
   deallocate(cappa)
@@ -1234,7 +1263,11 @@ contains
           RF_initialized = .true.
      endif
 
+    !$ser savepoint C2L_Ord2-In
+    !$ser data u=u v=v ua=ua va=va
     call c2l_ord2(u, v, ua, va, gridstruct, npz, gridstruct%grid_type, bd, gridstruct%nested)
+    !$ser savepoint C2L_Ord2-Out
+    !$ser data ua=ua va=va
 
     allocate( u2f(isd:ied,jsd:jed,kmax) )
 
