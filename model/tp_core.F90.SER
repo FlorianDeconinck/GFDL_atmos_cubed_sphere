@@ -276,7 +276,7 @@ contains
         endif
          !$ser verbatim damp_dup(1,1)=damp
          !$ser savepoint DelnFlux-Out
-         !$ser data_kbuff k=k k_size=nz fx=fx fy=fy damp_calc=damp_dup fx_tmp=fx_tmp fy_tmp=fy_tmp
+         !$ser data_kbuff k=k k_size=nz fx=fx fy=fy damp_calc=damp_dup
 
       endif
    else

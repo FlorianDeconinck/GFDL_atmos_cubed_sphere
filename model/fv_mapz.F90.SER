@@ -233,6 +233,11 @@ contains
   integer:: nt, liq_wat, ice_wat, rainwat, snowwat, cld_amt, graupel, iq, n, kmp, kp, k_next
   logical:: remap_t, remap_pt, remap_te
 
+! local versions of full pe/dpe arrays
+  real, dimension(is-1:ie+1,km+1,js-1:je+1) ::  peO
+  real, dimension(is:ie,km,js:je) :: dpe
+  real, dimension(is:ie,km,js:je) :: dpeO
+
   !$ser verbatim integer:: mode, abskord, iep1, iedp1, jedp1, js2d, o3mr, sgs_tke
   !$ser verbatim real :: qmin
   !$ser verbatim qmin = 0.0
@@ -240,11 +245,6 @@ contains
   !$ser verbatim iedp1=ied+1
   !$ser verbatim jedp1=jed+1
   !$ser verbatim js2d=js
-
-! local versions of full pe/dpe arrays
-  real, dimension(is-1:ie+1,km+1,js-1:je+1) ::  peO
-  real, dimension(is:ie,km,js:je) :: dpe
-  real, dimension(is:ie,km,js:je) :: dpeO
 
   kord(ikord_tm) = kord_tm
   kord(ikord_wz) = kord_wz
@@ -583,7 +583,7 @@ contains
 !----------------
 ! Map constituents
 !----------------
-!$OMP parallel do default(none) shared(nq,is,ie,js,je,km,q,kord_tr, &
+!$OMP parallel do default(private) shared(nq,is,ie,js,je,km,q,kord_tr, &
 !$OMP                                  pe,ptop,ak,bk,isd,ied,jsd,jed,fill) &
 !$OMP                          private(j,pe1,pe2,dp2)
       do 1001 j=js,je

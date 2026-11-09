@@ -112,6 +112,10 @@ target_compile_definitions (${this} PRIVATE MOIST_CAPPA USE_COND)
 ecbuild_info("This sets the INTERNAL_FILE_NML preprocessor variable")
 target_compile_definitions (${this} PRIVATE INTERNAL_FILE_NML)
 
-esma_add_subdirectories(
-  model/mapz-driver
-  model/tp-core-driver)
+# Don't build separate `mapz` and `tp-core` drivers.
+# If you do you have to fiddle with setting serialbox for those two, which is ugly, so
+# we just skip them because we don't need them.
+#
+# esma_add_subdirectories(
+#   model/mapz-driver
+#   model/tp-core-driver)

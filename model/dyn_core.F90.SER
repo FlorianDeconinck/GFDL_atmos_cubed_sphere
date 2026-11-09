@@ -452,7 +452,7 @@ contains
 !$ser data_writeonly use_old_omega=flagstruct%use_old_omega nord=flagstruct%nord
 !$ser data_writeonly a2b_ord=flagstruct%a2b_ord a_imp=flagstruct%a_imp scale_z=flagstruct%scale_z
 !$ser data_writeonly do_vort_damp=flagstruct%do_vort_damp n_sponge=flagstruct%n_sponge d_ext=flagstruct%d_ext do_f3d=flagstruct%do_f3d
-!$ser data_writeonly hord_tr=flagstruct%hord_tr dddmp=flagstruct%dddmp d4_bg=flagstruct%d4_bg fill_dp=flagstruct%fill_dp
+!$ser data_writeonly hord_tr=flagstruct%hord_tr dddmp=flagstruct%dddmp d4_bg_top=flagstruct%d4_bg_top d4_bg_bot=flagstruct#d4_bg_bot fill_dp=flagstruct%fill_dp
 !$ser data_writeonly fv_debug=flagstruct%fv_debug m_split=flagstruct%m_split use_logp=flagstruct%use_logp
 !$ser data_writeonly tau=flagstruct%tau RF_fast=flagstruct%RF_fast do_tofd=do_tofd beljaars_tofd=flagstruct%Beljaars_TOFD rot3=rot3
 
@@ -783,7 +783,7 @@ contains
     !$ser data crxd=crx cryd=cry xfxd=xfx yfxd=yfx q_cond=q_con zhd=zh heat_sourced=heat_source diss_estd=diss_est zvir=zvir nq=nq dt=dt nord_v=nord_v damp_vt=damp_vt
 
                                                      call timing_on('d_sw')
-!$OMP parallel do default(none) shared(npz,flagstruct,nord_v,pfull,damp_vt,hydrostatic,last_step, &
+!$OMP parallel do default(private) shared(npz,flagstruct,nord_v,pfull,damp_vt,hydrostatic,last_step, &
 !$OMP                                  is,ie,js,je,isd,ied,jsd,jed,omga,delp,gridstruct,npx,npy,  &
 !$OMP                                  ng,zh,vt,ptc,pt,u,v,w,uc,vc,ua,va,divgd,mfx,mfy,cx,cy,     &
 !$OMP                                  crx,cry,xfx,yfx,q_con,zvir,sphum,nq,q,dt,bd,rdt,iep1,jep1, &
