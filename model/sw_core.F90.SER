@@ -1410,10 +1410,6 @@ module sw_core_mod
       !$ser data_kbuff k=k k_size=nz vc=vc uc=uc nord_col=nord_dup
       !$ser savepoint FillCornersVector-Out
       !$ser data_kbuff k=k k_size=nz vc=vc uc=uc 
-      !$ser savepoint A2B_Ord4-In
-      !$ser data_kbuff k=k k_size=nz nord_col=nord_dup delpc=delpc wk=wk vort=vort
-      !$ser savepoint A2B_Ord4-Out 
-      !$ser data_kbuff k=k k_size=nz wk=wk vort=vort 
       if (nested) then
 
          do j=js,je+1
