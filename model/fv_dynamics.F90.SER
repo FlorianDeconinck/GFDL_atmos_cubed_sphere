@@ -624,6 +624,7 @@ contains
     !$ser data mfxd=mfxR8 mfyd=mfyR8 cxd=cxR8 cyd=cyR8
     !$ser data pkz=pkz peln=peln q_con=q_con ak=ak bk=bk ks=ks diss_estd=diss_est n_map=n_map_step
     !$ser data dpx=dpx
+    !$ser data varflt=varflt dudt_rf=dudt_rf dvdt_rf=dvdt_rf dwdt_rf=dwdt_rf
     if (.not. hydrostatic) then
 #ifdef USE_COND
       call start_group_halo_update(i_pack(1), q_con, domain, complete=.false.)
@@ -668,6 +669,7 @@ contains
       !$ser data mfxd=mfxR8 mfyd=mfyR8 cxd=cxR8 cyd=cyR8
       !$ser data pkz=pkz peln=peln q_con=q_con diss_estd=diss_est
       !$ser data dpx=dpx
+      !$ser varflt=varflt dudt_rf=dudt_rf dvdt_rf=dvdt_rf dwdt_rf=dwdt_rf
 
 !MassFluxRoundoffControl
 #ifdef SINGLE_FV
