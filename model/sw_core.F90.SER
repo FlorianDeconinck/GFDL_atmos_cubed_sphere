@@ -633,9 +633,11 @@ module sw_core_mod
       logical :: nested
       !$ser verbatim integer :: mpi_rank,ier
       !$ser verbatim integer :: nz, dir
-      !$ser verbatim real, dimension(1,1) :: damp_v_dup, nord_v_dup, nord_dup, nord_w_dup, damp4_dup, d2_bg_dup
+      !$ser verbatim real, dimension(1,1) :: damp_v_dup, damp_t_dup, nord_v_dup, nord_t_dup, nord_dup, nord_w_dup, damp4_dup, d2_bg_dup
       !$ser verbatim damp_v_dup(1,1)=damp_v
+      !$ser verbatim damp_t_dup(1,1)=damp_t
       !$ser verbatim nord_v_dup(1,1)=nord_v
+      !$ser verbatim nord_t_dup(1,1)=nord_t
       !$ser verbatim nord_dup(1,1)=nord
       !$ser verbatim nord_w_dup(1,1)=nord_w
       !$ser verbatim d2_bg_dup(1,1)=d2_bg
@@ -1081,7 +1083,7 @@ module sw_core_mod
         endif
 
         !$ser savepoint FvTp2d-In
-        !$ser data_kbuff k=k k_size=nz q=pt crx=crx_adv cry=cry_adv fx=gx fy=gy xfx=xfx_adv yfx=yfx_adv ra_x=ra_x ra_y=ra_y mass=delp damp_c=damp_v_dup nord_column=nord_v_dup
+        !$ser data_kbuff k=k k_size=nz q=pt crx=crx_adv cry=cry_adv fx=gx fy=gy xfx=xfx_adv yfx=yfx_adv ra_x=ra_x ra_y=ra_y mass=delp damp_c=damp_t_dup nord_column=nord_t_dup
         !$ser data_kbuff k=k k_size=nz mfx=fx mfy=fy
         !$ser verbatim if (k == nz) then 
         !$ser data hord=hord_tm
