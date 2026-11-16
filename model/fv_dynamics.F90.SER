@@ -669,7 +669,7 @@ contains
       !$ser data mfxd=mfxR8 mfyd=mfyR8 cxd=cxR8 cyd=cyR8
       !$ser data pkz=pkz peln=peln q_con=q_con diss_estd=diss_est
       !$ser data dpx=dpx
-      !$ser varflt=varflt dudt_rf=dudt_rf dvdt_rf=dvdt_rf dwdt_rf=dwdt_rf
+      !$ser data varflt=varflt dudt_rf=dudt_rf dvdt_rf=dvdt_rf dwdt_rf=dwdt_rf
 
 !MassFluxRoundoffControl
 #ifdef SINGLE_FV
